@@ -37,7 +37,11 @@ class Scanner:
             # input stream is easier.
             ch = self.read()
 
-            # TODO: Skip white space and comments
+            while ch.isspace() or ch == ';':
+                if ch == ';':
+                    while ch != '\n':
+                        ch = self.read()
+                ch = self.read()
 
             # Return None on EOF
             if ch == "":
@@ -73,8 +77,9 @@ class Scanner:
             # String constants
             elif ch == '"':
                 self.buf = []
-                # TODO: scan a string into the buffer variable buf
-    
+                ch = self.read()
+                while ch !='"'
+                    self.buf.append(ch)
                 return StrToken("".join(self.buf))
 
             # Integer constants
