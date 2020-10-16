@@ -31,6 +31,9 @@ class BoolLit(Node):
             else:
                 BoolLit.__falseInstance = self
 
+    def isBool(self):
+        return True
+
     def print(self, n, p=False):
         # There got to be a more efficient way to print n spaces.
         for _ in range(n):
@@ -39,6 +42,8 @@ class BoolLit(Node):
             sys.stdout.write("#t\n")
         else:
             sys.stdout.write("#f\n")
+
+    
 
 if __name__ == "__main__":
     b = BoolLit.getInstance(True)

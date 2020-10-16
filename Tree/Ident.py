@@ -7,11 +7,17 @@ class Ident(Node):
     def __init__(self, n):
         self.name = n
 
+    def isSymbol(self):
+        return True
+
     def print(self, n, p=False):
         # There got to be a more efficient way to print n spaces.
         for _ in range(n):
             sys.stdout.write(' ')
         sys.stdout.write(self.name + '\n')
+
+    def getName(self):
+        return self.name
 
 if __name__ == "__main__":
     id = Ident("foo")

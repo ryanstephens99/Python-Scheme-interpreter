@@ -18,6 +18,9 @@ class Nil(Node):
         else:
             Nil.__instance = self
 
+    def isNull(self):
+        return True
+
     def print(self, n, p=False):
         # There got to be a more efficient way to print n spaces.
         for _ in range(n):

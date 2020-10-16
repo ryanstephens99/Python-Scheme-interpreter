@@ -7,6 +7,9 @@ class StrLit(Node):
     def __init__(self, s):
         self.strVal = s
 
+    def isString(self):
+        return True
+
     def print(self, n, p=False):
         # There got to be a more efficient way to print n spaces.
         for _ in range(n):

@@ -35,6 +35,7 @@
 
 import sys
 from Tokens import TokenType
+from Tree import *
 
 class Parser:
     def __init__(self, s):
@@ -42,11 +43,22 @@ class Parser:
 
     def parseExp(self):
         # TODO: write code for parsing an exp
-        return None
+        tok = self.scanner.getNextToken()
+        return self.__parseExp(tok)
+
+    def __parseExp(self, tok):
+        if tok == None:
+            return None
+        elif tok.getType() == TokenType.IDENT:
+            return Ident(tok)
+
 
     def parseRest(self):
-        # TODO: write code for parsing a rest
-        return None
+        tok = self.scanner.getNextToken()
+        return self.__parseExp(tok)
+
+    def __parseExp(self, tok)
+        pass
 
     # TODO: Add any additional methods you might need
 

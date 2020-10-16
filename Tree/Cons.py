@@ -2,12 +2,16 @@
 
 from Tree import Node
 from Tree import Ident
+from Special import *
 
 class Cons(Node):
     def __init__(self, a, d):
         self.car = a
         self.cdr = d
         self.parseList()
+
+    def isPair(self):
+        return True
 
     # parseList() `parses' special forms, constructs an appropriate
     # object of a subclass of Special, and stores a pointer to that

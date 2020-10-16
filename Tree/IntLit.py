@@ -6,6 +6,9 @@ from Tree import Node
 class IntLit(Node):
     def __init__(self, i):
         self.intVal = i
+    
+    def isNumber(self):
+        return True
 
     def print(self, n, p=False):
         # There got to be a more efficient way to print n spaces.
