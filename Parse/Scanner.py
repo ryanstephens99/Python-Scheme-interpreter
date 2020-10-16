@@ -29,6 +29,39 @@ class Scanner:
     def isDigit(ch):
         return ch >= '0' and ch <= '9'
 
+    def isLetter(ch):
+        return ch.isalpha()
+
+    def isSpecialInitial(ch):
+        isSpecInit = False
+        if ch == '!':
+            isSpecInit = True
+        elif ch >= '$' and ch <= '&':
+            isSpecInit = True
+        elif ch == '*' or ch == '/' or ch == ':':
+            isSpecInit = True
+        elif ch >= '<' and ch <= '?':
+            isSpecInit = True
+        elif ch == '^' or ch == '_' or ch == '~':
+            isSpecInit = True
+        return isSpecInit
+
+    def isSpecialSubsequent(ch):
+        specialSubsequent = ['+', '-', '.', '@']
+        return ch in specialSubsequent
+
+    @staticmethod
+    def isPeculiarIdentifier(ch):
+        return ch == '+' or ch == '-'
+
+    @staticmethod
+    def isInitial(ch):
+        return Scanner.isLetter(ch) or Scanner.isSpecialInitial(ch)
+
+    @staticmethod
+    def isSubsequent(ch):
+        return Scanner.isInitial(ch) or Scanner.isDigit(ch) or Scanner.isSpecialSubsequent(ch)
+
     def getNextToken(self):
         try:
             # It would be more efficient if we'd maintain our own
@@ -37,7 +70,11 @@ class Scanner:
             # input stream is easier.
             ch = self.read()
 
-            # TODO: Skip white space and comments
+            while ch.isspace() or ch == ';':
+                if ch == ';':
+                    while ch != '\n':
+                        ch = self.read()
+                ch = self.read()
 
             # Return None on EOF
             if ch == "":
@@ -73,29 +110,35 @@ class Scanner:
             # String constants
             elif ch == '"':
                 self.buf = []
-                # TODO: scan a string into the buffer variable buf
-    
+                ch = self.read()
+                while ch !='"':
+                    self.buf.append(ch)
+                    ch = self.read()
                 return StrToken("".join(self.buf))
 
             # Integer constants
             elif self.isDigit(ch):
                 i = ord(ch) - ord('0')
-                # TODO: scan the number and convert it to an integer
+                nextCh = self.peek()
+                while self.isDigit(nextCh):
+                    ch = self.read()
+                    i = (i * 10) + ord(ch) - ord('0')
+                    nextCh = self.peek()
 
-                # make sure that the character following the integer
-                # is not removed from the input stream
                 return IntToken(i)
     
             # Identifiers
-            elif ch >= 'A' and ch <= 'Z':
-                # or ch is some other vaid first character
+            elif self.isPeculiarIdentifier(ch):
+                return IdentToken(ch)
+
+            elif self.isInitial(ch):
                 # for an identifier
-                self.buf = []
-                # TODO: scan an identifier into the buffer variable buf
-
-
-                # make sure that the character following the identifier
-                # is not removed from the input stream
+                self.buf = [ch.lower()]
+                nextCh = self.peek()
+                while self.isSubsequent(nextCh):
+                    ch = self.read()
+                    self.buf.append(ch.lower())
+                    nextCh = self.peek()
                 return IdentToken("".join(self.buf))
 
             # Illegal character
