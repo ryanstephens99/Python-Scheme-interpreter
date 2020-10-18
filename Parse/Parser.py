@@ -14,7 +14,8 @@
 #         |  string_constant
 #         |  identifier
 #    rest -> )
-#         |  exp+ [. exp] )
+#         |  exp rest
+#         |  exp . exp )
 #
 # and builds a parse tree.  Lists of the form (rest) are further
 # `parsed' into regular lists and special forms in the constructor
@@ -42,25 +43,61 @@ class Parser:
         self.scanner = s
 
     def parseExp(self):
-        # TODO: write code for parsing an exp
         tok = self.scanner.getNextToken()
         return self.__parseExp(tok)
 
     def __parseExp(self, tok):
         if tok == None:
             return None
+
+        elif tok.getType() == TokenType.LPAREN:
+            return self.parseRest()
+
+        elif tok.getType() == TokenType.FALSE:
+            return BoolLit.getInstance(False)
+
+        elif tok.getType() == TokenType.TRUE:
+            return BoolLit.getInstance(True)
+
+        elif tok.getType() == TokenType.QUOTE:
+            return Cons(Ident("'"), Cons(self.parseExp(), Nil.getInstance()))
+
+        elif tok.getType() == TokenType.INT:
+            return IntLit(tok.getIntVal())
+
+        elif tok.getType() == TokenType.STR:
+            return StrLit(tok.getStrVal())
+
         elif tok.getType() == TokenType.IDENT:
-            return Ident(tok)
+            return Ident(tok.getName())
+
+        elif tok.getType() == TokenType.RPAREN:
+            self.__error("Token Error: unexpected ')'")
+            return self.parseExp()
+
+        elif tok.getType() == TokenType.DOT:
+            self.__error("Token Error: unexpected '.'")
+            return self.parseExp()
+        
 
 
     def parseRest(self):
         tok = self.scanner.getNextToken()
         return self.__parseExp(tok)
 
-    def __parseExp(self, tok)
-        pass
+    def __parseRest(self, tok):
+        if tok == None:
+            return None
+        elif tok.getType() == TokenType.RPAREN:
+            return Nil.getInstance()
+        else:
+            exp = self.__parseExp(tok)
+            tok = self.scanner.getNextToken()
+            if tok.getType() == TokenType.DOT:
+                return Cons(exp, Cons(self.parseExp(), Nil.getInstance()))
+            else:
+                return Cons(exp, self.__parseRest(tok))
 
-    # TODO: Add any additional methods you might need
 
     def __error(self, msg):
         sys.stderr.write("Parse error: " + msg + "\n")

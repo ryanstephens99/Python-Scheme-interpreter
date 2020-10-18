@@ -10,9 +10,6 @@ class Cons(Node):
         self.cdr = d
         self.parseList()
 
-    def isPair(self):
-        return True
-
     # parseList() `parses' special forms, constructs an appropriate
     # object of a subclass of Special, and stores a pointer to that
     # object in variable form.  It would be possible to fully parse
@@ -21,10 +18,42 @@ class Cons(Node):
     # parseList only look at the car for selecting the appropriate
     # object from the Special hierarchy and to leave the rest of
     # parsing up to the interpreter.
+
     def parseList(self):
-        # TODO: implement this function and any helper functions
-        # you might need
-        self.form = None
+
+        self.form = Regular()
+        ident = self.getCar()
+        if ident.isSymbol():
+            identName = ident.getName()
+            if identName == "quote" or identName == "'" :
+                self.form = Quote()
+            elif identName == "lambda":
+                self.form = Lambda()
+            elif identName == "begin":
+                self.form = Begin()
+            elif identName == "if":
+                self.form = If()
+            elif identName == "let":
+                self.form = Let()
+            elif identName == "cond":
+                self.form = Cond()
+            elif identName == "define":
+                self.form = Define()
+            elif identName == "set!":
+                self.form = Set()
+
+    def getCar(self):
+        return self.car
+
+    def getCdr(self):
+        return self.cdr
+
+    def setCar(self, a):
+        self.car = a
+
+    def setCdr(self, d):
+        self.cdr = d
+        
 
     def print(self, n, p=False):
         self.form.print(self, n, p)

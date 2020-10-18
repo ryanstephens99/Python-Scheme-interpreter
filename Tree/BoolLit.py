@@ -43,6 +43,14 @@ class BoolLit(Node):
         else:
             sys.stdout.write("#f\n")
 
+     #---------------MY CODE------------#
+    def getVal(self):
+        return self.boolVal
+
+    def isBoolean(self):
+        return True
+    #---------------MY CODE------------#
+
     
 
 if __name__ == "__main__":

@@ -58,3 +58,6 @@ class Node(ABC):
 
     def setCdr(self, d):
         pass
+
+    def printQuote(self, n, p=False):
+        pass
