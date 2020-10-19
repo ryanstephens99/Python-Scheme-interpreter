@@ -3,6 +3,7 @@
 from Tree import Node
 from Tree import Ident
 from Special import *
+import sys
 
 class Cons(Node):
     def __init__(self, a, d):
@@ -25,7 +26,7 @@ class Cons(Node):
         ident = self.getCar()
         if ident.isSymbol():
             identName = ident.getName()
-            if identName == "quote" or identName == "'" :
+            if identName == "quote" or identName == "'":
                 self.form = Quote()
             elif identName == "lambda":
                 self.form = Lambda()
@@ -48,16 +49,22 @@ class Cons(Node):
     def getCdr(self):
         return self.cdr
 
-    def setCar(self, a):
-        self.car = a
-
-    def setCdr(self, d):
-        self.cdr = d
-        
+    def isPair(self):
+        return True
 
     def print(self, n, p=False):
+        # sys.stdout.write("(")
+        # self.getCar().print(1)
+        # sys.stdout.write(".")
+        # self.getCdr().print(1)
+        # sys.stdout.write(")")
+
+
         self.form.print(self, n, p)
 
 if __name__ == "__main__":
     c = Cons(Ident("Hello"), Ident("World"))
     c.print(0)
+
+
+

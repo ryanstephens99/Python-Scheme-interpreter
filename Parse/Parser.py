@@ -83,9 +83,10 @@ class Parser:
 
     def parseRest(self):
         tok = self.scanner.getNextToken()
-        return self.__parseExp(tok)
+        return self.__parseRest(tok)
 
     def __parseRest(self, tok):
+
         if tok == None:
             return None
         elif tok.getType() == TokenType.RPAREN:
@@ -94,7 +95,8 @@ class Parser:
             exp = self.__parseExp(tok)
             tok = self.scanner.getNextToken()
             if tok.getType() == TokenType.DOT:
-                return Cons(exp, Cons(self.parseExp(), Nil.getInstance()))
+                expRest = Cons(self.parseExp(), self.parseRest())
+                return Cons(exp, Cons(Ident("."), expRest))
             else:
                 return Cons(exp, self.__parseRest(tok))
 

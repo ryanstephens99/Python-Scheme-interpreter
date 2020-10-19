@@ -9,9 +9,11 @@ class IntLit(Node):
 
     def print(self, n, p=False):
         # There got to be a more efficient way to print n spaces.
-        for _ in range(n):
-            sys.stdout.write(' ')
-        sys.stdout.write(str(self.intVal) + '\n')
+        if n > 0:
+            sys.stdout.write('\n')
+            for _ in range(n):
+                sys.stdout.write(' ')
+        sys.stdout.write(str(self.intVal))
 
     def getVal(self):
         return self.intVal
